@@ -1,0 +1,64 @@
+<html>
+<head>
+    <title>Static</title>
+    <script src="/js/main.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1>CORS-SANDBOX</h1>
+    <form id="cors-form">
+        <div class="form-group">
+            <label for="server">Server</label>
+            <select class="form-control" id="server" name="server">
+                <option value="cross">Send request to cross origin</option>
+                <option value="same">Send request to same origin</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="mode">Mode</label>
+            <select class="form-control" id="mode" name="mode">
+                <option value="no-cors">no-cors</option>
+                <option value="cors">cors</option>
+                <option value="same-origin">same-origin</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="credentials">Credentials</label>
+            <select class="form-control" id="credentials" name="credentials">
+                <option value="include">include</option>
+                <option value="same-origin">same-origin</option>
+                <option value="same-origin">omit</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="method">Method</label>
+            <select class="form-control" id="method" name="method">
+                <option value="POST">POST</option>
+                <option value="GET">GET</option>
+                <option value="PUT">PUT</option>
+            </select>
+
+        </div>
+        <div class="form-group">
+            <label for="bodyType">Body type</label>
+            <select class="form-control" id="bodyType" name="bodyType">
+                <option value="text">Content-Type: text/plain</option>
+                <option value="json">Content-Type: application/json</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="header">Custom header</label>
+            <input type="text" class="form-control" id="header"  name="header" placeholder="Header">
+            <small id="headerHelp" class="form-text text-muted">Example: X-Some-Header </small>
+        </div>
+        <div class="form-group">
+            <label for="headerValue">Custom header value</label>
+            <input type="text" class="form-control" id="headerValue"  name="headerValue" placeholder="Header value">
+        </div>
+        <button type="submit" class="btn btn-primary">Send request</button>
+    </form>
+</div>
+</body>
+</html>
