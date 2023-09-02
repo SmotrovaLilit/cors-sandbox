@@ -39,7 +39,25 @@ The request will **not** be sent to the server.
 		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD"}),
 	)(routerAnotherServer)
 ```
+## Run the sandbox in unsafe browser mode
+Close all chrome instances and run in terminal:
+
+MacOS
+```bash
+open -na Google\ Chrome --args --user-data-dir=/tmp/temporary-chrome-profile-dir --disable-web-security --disable-site-isolation-trials
+```
+See details here [4](#references)
+
+Kali Linux
+```bash
+google-chrome  --user-data-dir="~/google-chrome-data" --disable-web-security
+```
+
+
+Go to http://127.0.0.1:3000
+
 ## References
 1. https://developer.mozilla.org/en-US/docs/Web/API/Request/mode
 2. https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 3. https://developer.mozilla.org/ru/docs/Web/HTTP/CORS
+4. https://stackoverflow.com/questions/35432749/disable-web-security-in-chrome-48
