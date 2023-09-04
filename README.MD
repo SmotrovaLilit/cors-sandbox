@@ -1,63 +1,96 @@
 # CORS
-This sandbox allows testing CORS requests with options:
-- mode
-- credentials
-- headers
-- methods
-- content type
+
+The sandbox features:
+1. Availability to test cross-origin requests using fetch[1](#references) with different settings:
+    - mode
+    - credentials
+    - headers
+    - methods
+    - content type 
+2. Availability to test behaviour with sending cookie in cross-origin requests with different cookie settings:
+    - SameSite mode (None, Lax, Strict, Default)
+    - HttpOnly flag
+    - Secure flag
+3. Availability to test cross-origin requests and sending cookie behaviour with sending requests to:
+    - subdomains/different domains
+    - http/https
+    - server with allowed cross-origin requests/server with not allowed cross-origin requests 
 
 ![example.png](assets/example.png)
 
-The result can be seen in the console log. 
-Using tools like Burpsuite you can see real requests to the server with responses. 
 
-## Client site settings Mode
-### Mode cors (default) 
-If the request is not of the same origin:
-- For methods GET, HEAD, and POST, the browser will send the request. JS can read the response only if the server returns the right CORS headers.
-- For other methods, the browser first sends the OPTIONS method to the server to ask for permissions. If the server returns the right CORS headers, the browser will send the request. JS can read the response only if the server returns the right CORS headers.
-- In some cases for GET, HEAD, and POST the browser will send options too. For example, if custom headers are used, or content type is been application/json. Read more in [3](#references)
+The result can be seen in the console log.
+Using tools like BurpSuite you can see real requests to the server with responses.
 
-### Mode no-cors
-If the request is not of the same origin:
-- Request method is limited to GET, HEAD, or POST. The browser will **do** request to the server but js will **not** have access to the response.
-- If the request method is not one of these the browser will return an error and the request will **not** be sent to the server.
+## Installation
 
-### Mode same-origin.
-If this mode is set and the origin isn't the same, an error will be occurred.
-The request will **not** be sent to the server.
+Add to etc hosts
 
-## Server CORS implementation
-- Server allows requests from origin http://127.0.0.1:3000 with credentials. 
-- Server allows methods GET, POST, PUT, and HEAD.
-- Server allows headers Content-Type.
-```go
-    handler := handlers.CORS(
-		handlers.AllowedOrigins([]string{"http://127.0.0.1:3000"}),
-		handlers.AllowedHeaders([]string{"Content-Type"}),
-		handlers.AllowCredentials(),
-		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD"}),
-	)(routerAnotherServer)
+```bash
+127.0.0.1 allowing.cors.com
+127.0.0.1 inallowing.cors.com
+127.0.0.1 allowing.cors-another.com
+127.0.0.1 inallowing.cors-another.com
+127.0.0.1 origin.cors.com
 ```
+
+Add certs.caroot.cer to trusted certificates
+
+Run docker-compose
+
+```bash
+docker-compose up
+```
+
+Run http servers
+```bash
+go run cmd/server/main.go
+```
+
+Open application
+
+Go to http://origin.cors.com or https://origin.cors.com
+
 ## Run the sandbox in unsafe browser mode
+If you need to test behavior without browser security policy you can run chrome in unsafe mode.
+
 Close all chrome instances and run in terminal:
 
 MacOS
+
 ```bash
 open -na Google\ Chrome --args --user-data-dir=/tmp/temporary-chrome-profile-dir --disable-web-security --disable-site-isolation-trials
 ```
-See details here [4](#references)
+
+See details here [2](#references)
 
 Kali Linux
+
 ```bash
 google-chrome  --user-data-dir="~/google-chrome-data" --disable-web-security
 ```
 
+Go to http://origin.cors.com or https://origin.cors.com
 
-Go to http://127.0.0.1:3000
+## Update certificates
+If you need to update certificates you can:
+
+```bash
+brew install mkcert
+mkcert -install
+```
+
+move created certificate to nginx/certs folder
+
+```bash
+cd nginx/certs
+mkcert "*.cors.com"
+mkcert "*.cors-another.com"
+```
+## Notes about CORS behaviour
+[INDEX.MD](wiki%2FINDEX.MD)
 
 ## References
-1. https://developer.mozilla.org/en-US/docs/Web/API/Request/mode
-2. https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+1. https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+2. https://stackoverflow.com/questions/35432749/disable-web-security-in-chrome-48
 3. https://developer.mozilla.org/ru/docs/Web/HTTP/CORS
-4. https://stackoverflow.com/questions/35432749/disable-web-security-in-chrome-48
